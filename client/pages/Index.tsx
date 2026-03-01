@@ -2,30 +2,13 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import Layout from "@/components/Layout";
 import ProblemSubmissionModal from "@/components/ProblemSubmissionModal";
 import AIResponseChat from "@/components/AIResponseChat";
 import {
   ArrowRight,
-  CheckCircle,
-  MessageSquare,
   Users,
-  Clock,
   Star,
   Brain,
   Heart,
@@ -33,7 +16,6 @@ import {
   Globe,
   Dumbbell,
   Smile,
-  Coffee,
   DollarSign,
   Mic,
   MicOff,
@@ -62,9 +44,7 @@ export default function Index() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
     console.log("Problem submitted:", formData);
-    // Show success message or redirect
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -115,14 +95,6 @@ export default function Index() {
     }
   };
 
-  const categories = [
-    "Mental Health",
-    "Physical Wellness",
-    "Relationships",
-    "Career & Student Life",
-    "Other Issues",
-  ];
-
   const stats = [
     { number: "500+", label: "Problems Solved" },
     { number: "100+", label: "Happy People" },
@@ -144,7 +116,7 @@ export default function Index() {
               </span>
             </div>
 
-            {/* Main Heading - More Casual */}
+            {/* Main Heading */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight">
               Hey, we get it.{" "}
               <span className="text-purple-300">Every problem</span> has a
@@ -157,37 +129,26 @@ export default function Index() {
                 Don't worry, we are here for you. Whatever challenge you're
                 facing, you don't have to go through it alone.
               </p>
-              <p className="text-base sm:text-lg text-purple-200 font-medium">
-                Share what's on your mind. Connect with caring experts. Feel
-                supported again. ✨
-              </p>
             </div>
 
-            {/* Quick Input Prompt - Enhanced Styling */}
+            {/* Quick Input Prompt */}
             <div className="max-w-3xl mx-auto mb-10 relative">
-              {/* Floating Background Elements */}
               <div className="absolute -top-6 -left-6 w-32 h-32 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-2xl"></div>
               <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-xl"></div>
 
               <div className="relative bg-white/95 backdrop-blur-lg rounded-2xl sm:rounded-3xl border-2 border-purple-200/60 p-6 sm:p-8 md:p-10 shadow-2xl transition-all duration-300 hover:shadow-3xl mx-4 sm:mx-0">
-                {/* Gradient Border Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 rounded-2xl sm:rounded-3xl opacity-100 transition-opacity duration-300"></div>
-
+                
                 <div className="relative">
-                  {/* Enhanced Header */}
                   <div className="text-center mb-6">
                     <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-2">
                       What's on your mind today?
                     </h3>
-                    <p className="text-gray-500 text-sm">
-                      Share anything that's bothering you. We're here to listen.
-                    </p>
                   </div>
 
-                  {/* Enhanced Textarea */}
+                  {/* Textarea */}
                   <div className="relative mb-6">
                     <textarea
-                      placeholder="Type anything... stress, family issues, work problems, exam pressure, relationship troubles, or whatever's on your mind. No judgment, just support. ✨"
+                      placeholder="Type anything... stress, family issues, work problems, exam pressure... No judgment, just support. ✨"
                       className="w-full h-32 sm:h-36 px-4 sm:px-6 py-4 sm:py-5 pr-12 sm:pr-16 rounded-xl sm:rounded-2xl border-2 border-purple-200 bg-purple-50/40 focus:border-purple-500 focus:ring-4 focus:ring-purple-200/50 focus:bg-white outline-none resize-none text-gray-700 placeholder-gray-400 transition-all duration-300 text-sm sm:text-base leading-relaxed shadow-inner"
                       value={formData.description}
                       onChange={(e) =>
@@ -204,11 +165,6 @@ export default function Index() {
                           ? "bg-red-500 text-white animate-pulse"
                           : "bg-purple-500 hover:bg-purple-600 text-white"
                       }`}
-                      title={
-                        isListening
-                          ? "सुन रहा है... (Listening...)"
-                          : "बोलकर बताएं (Click to speak)"
-                      }
                     >
                       {isListening ? (
                         <MicOff className="w-4 h-4" />
@@ -216,15 +172,9 @@ export default function Index() {
                         <Mic className="w-4 h-4" />
                       )}
                     </button>
-                    {/* Character count or helpful text */}
-                    <div className="absolute bottom-3 right-4 text-xs text-gray-400 hidden sm:block">
-                      {isListening
-                        ? "सुन रहा है... (Listening...)"
-                        : "Press Enter for new line"}
-                    </div>
                   </div>
 
-                  {/* Enhanced Buttons */}
+                  {/* Buttons */}
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <Button
                       className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl sm:rounded-2xl py-3 sm:py-4 px-6 sm:px-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 text-base sm:text-lg font-semibold min-h-[48px]"
@@ -237,7 +187,6 @@ export default function Index() {
                           });
                           setModalOpen(true);
                         } else {
-                          // Scroll to categories if no description
                           document
                             .getElementById("problem-categories")
                             ?.scrollIntoView({ behavior: "smooth" });
@@ -246,7 +195,6 @@ export default function Index() {
                     >
                       <Heart className="mr-3 h-5 w-5" />
                       Get Help With This
-                      <ArrowRight className="ml-3 h-5 w-5" />
                     </Button>
                     <Button
                       variant="outline"
@@ -259,42 +207,12 @@ export default function Index() {
                       </Link>
                     </Button>
                   </div>
-
-                  {/* Quick Trust Indicators */}
-                  <div className="flex items-center justify-center gap-6 mt-6 pt-6 border-t border-purple-100">
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full shadow-sm"></div>
-                      <span>Completely Anonymous</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full shadow-sm"></div>
-                      <span>Safe & Secure</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Additional Info */}
-            <div className="text-center mb-16">
-              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/70">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span>100% Anonymous</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  <span>Safe & Secure</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                  <span>No Judgment</span>
                 </div>
               </div>
             </div>
 
             {/* Simple Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-3xl mx-auto px-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-3xl mx-auto px-4 mt-8">
               {stats.map((stat, index) => (
                 <div
                   key={index}
@@ -313,107 +231,87 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Problem Categories - Casual */}
-      <section id="problem-categories" className="py-20 relative">
+      {/* Problem Categories - CHANGED: Simplified cards */}
+      <section id="problem-categories" className="py-20 relative bg-black/10">
         <div className="container">
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
               What's on your mind?
             </h2>
             <p className="text-lg text-white/80">
-              Whatever it is, we've probably helped someone with something
-              similar
+              Select a category to get started
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto px-4">
             {[
               {
                 icon: Brain,
                 title: "Mental Health",
-                description:
-                  "Stress, anxiety, feeling overwhelmed, or just need someone to listen",
-                color: "bg-purple-100 text-purple-600",
-                borderColor: "border-purple-200",
+                description: "Stress, anxiety, or feeling overwhelmed.",
+                color: "bg-purple-500",
               },
               {
                 icon: Dumbbell,
                 title: "Physical Wellness",
-                description:
-                  "Sleep problems, energy issues, body pain, or health concerns",
-                color: "bg-green-100 text-green-600",
-                borderColor: "border-green-200",
+                description: "Sleep problems, energy issues, or health.",
+                color: "bg-green-500",
               },
               {
                 icon: Heart,
                 title: "Relationships",
-                description:
-                  "Family drama, breakups, friendship issues, or feeling lonely",
-                color: "bg-red-100 text-red-600",
-                borderColor: "border-red-200",
+                description: "Family drama, breakups, or feeling lonely.",
+                color: "bg-red-500",
               },
               {
                 icon: GraduationCap,
                 title: "Work & Study",
-                description:
-                  "Job stress, exam pressure, career confusion, or burnout",
-                color: "bg-blue-100 text-blue-600",
-                borderColor: "border-blue-200",
+                description: "Exam pressure, career confusion, or burnout.",
+                color: "bg-blue-500",
               },
               {
                 icon: DollarSign,
                 title: "Financial Stress",
-                description:
-                  "Money worries, debt issues, budgeting problems, or financial planning",
-                color: "bg-emerald-100 text-emerald-600",
-                borderColor: "border-emerald-200",
+                description: "Money worries, debt issues, budgeting.",
+                color: "bg-emerald-500",
               },
               {
                 icon: Globe,
                 title: "Life Stuff",
-                description:
-                  "Identity questions, motivation, bad habits, or just figuring things out",
-                color: "bg-orange-100 text-orange-600",
-                borderColor: "border-orange-200",
+                description: "Motivation, habits, or figuring things out.",
+                color: "bg-orange-500",
               },
             ].map((category, index) => {
               const Icon = category.icon;
               return (
                 <Card
                   key={index}
-                  className="hover:shadow-2xl transition-all duration-300 cursor-pointer border border-white/20 bg-white/10 backdrop-blur-sm hover:bg-white/20"
+                  className="hover:-translate-y-2 transition-transform duration-300 cursor-pointer border-none bg-white shadow-xl rounded-2xl overflow-hidden group"
+                  onClick={() => {
+                    setSelectedCategory({
+                      title: category.title,
+                      icon: category.icon,
+                      color: `text-${category.color.split('-')[1]}-600 bg-${category.color.split('-')[1]}-100`,
+                    });
+                    setModalOpen(true);
+                  }}
                 >
-                  <CardContent className="p-6 text-center">
-                    <div
-                      className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full ${category.color} mb-4`}
-                    >
-                      <Icon className="h-7 w-7" />
+                  <div className={`h-2 w-full ${category.color}`}></div>
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4 mb-3">
+                      <div className={`p-3 rounded-xl ${category.color} bg-opacity-10`}>
+                        <Icon className={`h-6 w-6 text-gray-800`} />
+                      </div>
+                      <h3 className="text-lg font-bold text-gray-800">
+                        {category.title}
+                      </h3>
                     </div>
-
-                    <h3 className="text-lg font-semibold text-white mb-3">
-                      {category.title}
-                    </h3>
-
-                    <p className="text-white/80 text-sm leading-relaxed">
+                    <p className="text-gray-600 text-sm mb-4">
                       {category.description}
                     </p>
-
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="mt-4 text-purple-300 hover:bg-white/20 hover:text-white"
-                      onClick={() => {
-                        setSelectedCategory({
-                          title: category.title,
-                          icon: category.icon,
-                          color: category.color,
-                        });
-                        setModalOpen(true);
-                      }}
-                    >
-                      Get help with this
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                    <div className="flex items-center text-sm font-semibold text-purple-600 group-hover:text-pink-500 transition-colors">
+                      Get Help <ArrowRight className="ml-1 h-4 w-4" />
+                    </div>
                   </CardContent>
                 </Card>
               );
@@ -422,16 +320,13 @@ export default function Index() {
         </div>
       </section>
 
-      {/* How It Works - Simple */}
+      {/* How It Works */}
       <section className="py-20 relative">
         <div className="container">
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
               How it works
             </h2>
-            <p className="text-lg text-white/80">
-              It's pretty simple, actually
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-4xl mx-auto">
@@ -439,91 +334,28 @@ export default function Index() {
               {
                 step: "1",
                 title: "Tell us what's up",
-                description:
-                  "Share what's bothering you - as much or as little as you want. It's completely anonymous.",
+                description: "Share what's bothering you. It's completely anonymous.",
               },
               {
                 step: "2",
                 title: "We match you up",
-                description:
-                  "Our team finds the right person to help based on what you're going through.",
+                description: "Our team finds the right person based on your needs.",
               },
               {
                 step: "3",
-                title: "Get the support you need",
-                description:
-                  "Chat with someone who gets it, get advice, or just have someone listen.",
+                title: "Get support",
+                description: "Chat with someone who gets it and get advice.",
               },
             ].map((step, index) => (
               <div key={index} className="text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-white mb-6 text-xl font-bold shadow-lg">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-white mb-6 text-xl font-bold border border-white/30">
                   {step.step}
                 </div>
-
-                <h3 className="text-xl font-semibold text-white mb-4">
+                <h3 className="text-xl font-semibold text-white mb-2">
                   {step.title}
                 </h3>
-
-                <p className="text-white/80">{step.description}</p>
+                <p className="text-white/70">{step.description}</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials - Casual */}
-      <section className="py-20 relative">
-        <div className="container">
-          <div className="mx-auto max-w-2xl text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-              Real talk from real people
-            </h2>
-            <p className="text-lg text-white/80">
-              Here's what some folks have said about getting help
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {[
-              {
-                content:
-                  "Honestly, I finally felt heard. Thank you for creating this space.",
-                author: "College student",
-              },
-              {
-                content:
-                  "SamasyaSamadhan helped me when I literally had no one else to talk to.",
-                author: "Working professional",
-              },
-              {
-                content:
-                  "It's like having a friend who really listens without judging.",
-                author: "Someone who needed support",
-              },
-            ].map((testimonial, index) => (
-              <Card
-                key={index}
-                className="bg-white/10 backdrop-blur-sm border border-white/20"
-              >
-                <CardContent className="p-6">
-                  <div className="flex mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="h-4 w-4 fill-yellow-400 text-yellow-400"
-                      />
-                    ))}
-                  </div>
-
-                  <blockquote className="text-white mb-4 italic">
-                    "{testimonial.content}"
-                  </blockquote>
-
-                  <div className="text-sm text-white/70">
-                    — {testimonial.author}
-                  </div>
-                </CardContent>
-              </Card>
             ))}
           </div>
         </div>
@@ -558,10 +390,8 @@ export default function Index() {
         userInfo={submittedData || {}}
         onConnectExpert={(expertId) => {
           console.log("Connecting with expert:", expertId);
-          // Handle expert connection
           setAiAnalysisOpen(false);
           setSubmittedData(null);
-          // You can redirect to expert chat or show success message
         }}
       />
     </Layout>
