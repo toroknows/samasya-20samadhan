@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import {
   Star,
   Clock,
-  MessageSquare,
   Video,
   MapPin,
   Award,
@@ -15,6 +14,7 @@ import {
   DollarSign,
   Dumbbell,
   Globe,
+  MessageSquare
 } from "lucide-react";
 
 export default function Experts() {
@@ -30,7 +30,6 @@ export default function Experts() {
       languages: ["Hindi", "English", "Marathi"],
       location: "Pune, Maharashtra",
       price: "₹1200 / session",
-      availability: "Available today",
       bio: "Expert psychologist specializing in mental health, relationships, career guidance, and life transformation. Helping people find clarity and purpose.",
       categories: ["Mental Health", "Relationships", "Work & Study", "Life Stuff"],
     },
@@ -45,7 +44,6 @@ export default function Experts() {
       languages: ["Hindi", "English"],
       location: "Mumbai, Maharashtra",
       price: "₹800 / session",
-      availability: "Available today",
       bio: "Specialized in anxiety, depression, and stress management.",
       categories: ["Mental Health"],
     },
@@ -60,7 +58,6 @@ export default function Experts() {
       languages: ["Hindi", "English", "Punjabi"],
       location: "Delhi, India",
       price: "₹600 / session",
-      availability: "Available tomorrow",
       bio: "Expert in career guidance and workplace stress.",
       categories: ["Work & Study"],
     },
@@ -75,7 +72,6 @@ export default function Experts() {
       languages: ["Hindi", "English", "Gujarati"],
       location: "Ahmedabad, Gujarat",
       price: "₹900 / session",
-      availability: "Available today",
       bio: "Specializes in couples therapy and family counseling.",
       categories: ["Relationships"],
     },
@@ -96,6 +92,34 @@ export default function Experts() {
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed mb-12 max-w-3xl mx-auto">
               Connect with verified professionals who understand your challenges and can guide you towards solutions.
             </p>
+          </div>
+
+          {/* CHANGED: Moved Categories to right below the heading */}
+          <div className="mb-16">
+            <h2 className="text-2xl font-bold text-white mb-6 text-center">
+              Browse by Category
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-5xl mx-auto">
+              {[
+                { name: "Mental Health", icon: Brain, color: "bg-purple-100 text-purple-600" },
+                { name: "Relationships", icon: Heart, color: "bg-red-100 text-red-600" },
+                { name: "Work & Study", icon: GraduationCap, color: "bg-blue-100 text-blue-600" },
+                { name: "Financial Stress", icon: DollarSign, color: "bg-emerald-100 text-emerald-600" },
+                { name: "Physical Wellness", icon: Dumbbell, color: "bg-green-100 text-green-600" },
+                { name: "Life Stuff", icon: Globe, color: "bg-orange-100 text-orange-600" },
+              ].map((category) => {
+                const Icon = category.icon;
+                return (
+                  <button
+                    key={category.name}
+                    className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 hover:scale-105 transition-all duration-300"
+                  >
+                    <Icon className="w-6 h-6 mx-auto mb-2" />
+                    <div className="text-xs font-medium">{category.name}</div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Experts Grid */}
@@ -128,7 +152,7 @@ export default function Experts() {
                   </div>
 
                   {/* Bio */}
-                  <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+                  <p className="text-gray-600 text-sm mb-4 leading-relaxed line-clamp-2">
                     {expert.bio}
                   </p>
 
@@ -157,36 +181,20 @@ export default function Experts() {
                     ))}
                   </div>
 
-                  {/* Pricing */}
+                  {/* CHANGED: Removed Availability Badge */}
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <div className="font-bold text-purple-700">{expert.price}</div>
-                      <div className="text-xs text-gray-500">{expert.availability}</div>
                     </div>
-                    <Badge 
-                      variant={expert.availability.includes('today') ? 'default' : 'secondary'}
-                      className="text-xs"
-                    >
-                      {expert.availability.includes('today') ? '🟢 Available' : '🟡 Busy'}
-                    </Badge>
                   </div>
 
-                  {/* Action Buttons */}
+                  {/* CHANGED: Removed Message button, made Connect button full width */}
                   <div className="flex gap-2">
                     <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="flex-1 text-xs"
-                    >
-                      <MessageSquare className="w-3 h-3 mr-1" />
-                      Message
-                    </Button>
-                    <Button 
                       onClick={() => handleConnectExpert(expert.id)}
-                      className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-xs"
-                      size="sm"
+                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                     >
-                      <Video className="w-3 h-3 mr-1" />
+                      <Video className="w-4 h-4 mr-2" />
                       Connect
                     </Button>
                   </div>
@@ -195,36 +203,8 @@ export default function Experts() {
             ))}
           </div>
 
-          {/* Categories */}
-          <div className="mt-16">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">
-              Browse by Category
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-5xl mx-auto">
-              {[
-                { name: "Mental Health", icon: Brain, color: "bg-purple-100 text-purple-600" },
-                { name: "Relationships", icon: Heart, color: "bg-red-100 text-red-600" },
-                { name: "Work & Study", icon: GraduationCap, color: "bg-blue-100 text-blue-600" },
-                { name: "Financial Stress", icon: DollarSign, color: "bg-emerald-100 text-emerald-600" },
-                { name: "Physical Wellness", icon: Dumbbell, color: "bg-green-100 text-green-600" },
-                { name: "Life Stuff", icon: Globe, color: "bg-orange-100 text-orange-600" },
-              ].map((category) => {
-                const Icon = category.icon;
-                return (
-                  <button
-                    key={category.name}
-                    className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all duration-300"
-                  >
-                    <Icon className="w-6 h-6 mx-auto mb-2" />
-                    <div className="text-xs font-medium">{category.name}</div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
           {/* CTA Section */}
-          <div className="text-center mt-16">
+          <div className="text-center mt-20">
             <h3 className="text-2xl font-bold text-white mb-4">
               Can't Find the Right Expert?
             </h3>
@@ -232,11 +212,10 @@ export default function Experts() {
               Tell us about your specific needs and we'll help you find the perfect match.
             </p>
             <Button 
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 text-lg font-semibold"
+              className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-6 text-lg font-semibold rounded-full shadow-lg"
               asChild
             >
               <a href="/#problem-categories">
-                <MessageSquare className="mr-2 h-5 w-5" />
                 Tell Us Your Problem
               </a>
             </Button>
