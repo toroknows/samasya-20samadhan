@@ -11,7 +11,6 @@ export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // CHANGED: Removed "Get Help" from navigation
   const navigation = [
     { name: "Home", href: "/", icon: Home },
     { name: "Find Expert", href: "/mentor", icon: Users },
@@ -71,7 +70,7 @@ export default function Layout({ children }: LayoutProps) {
                 })}
               </nav>
 
-              {/* CHANGED: Added Search Bar */}
+              {/* Search Bar */}
               <div className="relative">
                 <input
                   type="text"
@@ -113,7 +112,7 @@ export default function Layout({ children }: LayoutProps) {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-purple-100 bg-white">
             <div className="container py-4 space-y-4">
-              {/* CHANGED: Mobile Search Bar */}
+              {/* Mobile Search Bar */}
               <div className="px-4">
                 <div className="relative">
                   <input
@@ -230,7 +229,6 @@ export default function Layout({ children }: LayoutProps) {
                   Quick Links
                 </h3>
                 <ul className="space-y-4">
-                  {/* CHANGED: Removed Get Help & Expert links */}
                   <li>
                     <Link to="/how-it-works" className="text-gray-300 hover:text-white transition-colors duration-200 flex items-center space-x-2 group">
                       <div className="w-2 h-2 bg-purple-400 rounded-full group-hover:bg-pink-400 transition-colors"></div>
@@ -260,7 +258,7 @@ export default function Layout({ children }: LayoutProps) {
                   </li>
                 </ul>
 
-                {/* CHANGED: Replaced "Connect with us" with Social Icons */}
+                {/* Social Icons */}
                 <div className="pt-2">
                   <div className="flex space-x-4">
                     <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-gradient-to-br hover:from-purple-500 hover:to-pink-500 transition-all duration-300 hover:scale-110">
