@@ -22,7 +22,8 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      {/* CHANGED: Added the basename here so it works on GitHub Pages */}
+      <BrowserRouter basename="/samasya-20samadhan/">
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/mentor" element={<Experts />} />
