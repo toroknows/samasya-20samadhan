@@ -47,26 +47,14 @@ export default function AIResponseChat({
   userInfo,
   onConnectExpert,
 }: AIResponseChatProps) {
-  const [isTyping, setIsTyping] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
   const [showExperts, setShowExperts] = useState(false);
+  const [aiResponseText, setAiResponseText] = useState("");
+  const [experts, setExperts] = useState<Expert[]>([]);
 
-  // Generate AI response based on the problem and detected language
-  const generateAIResponse = (problem: string, cat: string, user: any) => {
-    // Detect language from user's problem description
-    const detectedLang = detectLanguage(problem);
-    console.log("Detected language:", detectedLang);
-
-    // Get multi-language responses
-    const responses = getAIResponses(user);
-    const categoryResponses = responses[cat] || responses["Mental Health"];
-
-    // Format response based on detected language
-    return formatResponseByLanguage(detectedLang, categoryResponses);
-  };
-
-  // Generate experts based on category
-  const generateExperts = (category: string) => {
+  // ---------- Experts ----------
+  const generateExperts = (cat: string): Expert[] => {
     const expertsMap: { [key: string]: Expert[] } = {
       "Mental Health": [
         {
@@ -181,30 +169,106 @@ export default function AIResponseChat({
       ],
     };
 
-    return expertsMap[category] || expertsMap["Mental Health"];
+    return expertsMap[cat] || expertsMap["Mental Health"];
   };
 
-  const aiResponse = generateAIResponse(problemText, category, userInfo);
-  const experts = generateExperts(category);
+  // ---------- AI response (language-aware) ----------
+  const generateAIResponse = async (problem: string, cat: string, user: any) => {
+    const detectedLang = detectLanguage(problem);
+    console.log("Detected language:", detectedLang);
 
-  // Typing animation effect
+    const responses = await getAIResponses(problem); // returns: {category, greeting, analysis, recommendation, summary, language}
+    const categoryFromAI = responses.category || cat || "Mental Health";
+
+    // Build variants
+    const variants = {
+      hindi: `
+🪔 ${responses.greeting}
+📖 ${responses.analysis}
+✅ ${responses.recommendation}
+✨ ${responses.summary}
+    `.trim(),
+      hinglish: `
+👋 ${responses.greeting}
+🔍 ${responses.analysis}
+💡 ${responses.recommendation}
+📝 ${responses.summary}
+    `.trim(),
+      english: `
+👋 ${responses.greeting}
+🔍 ${responses.analysis}
+💡 ${responses.recommendation}
+📝 ${responses.summary}
+    `.trim(),
+    };
+
+    // Select text based on detected language
+    const text = formatResponseByLanguage(detectedLang, variants);
+
+    // Set experts for the AI-picked category
+    setExperts(generateExperts(categoryFromAI));
+
+    return text;
+  };
+
+  // ---------- Fetch and type the AI response when the modal opens ----------
   useEffect(() => {
-    if (isOpen && isTyping) {
-      let index = 0;
-      const timer = setInterval(() => {
-        if (index < aiResponse.length) {
-          setDisplayedText(aiResponse.substring(0, index + 1));
-          index++;
-        } else {
-          setIsTyping(false);
-          setTimeout(() => setShowExperts(true), 1000);
-          clearInterval(timer);
-        }
-      }, 30); // Typing speed
+    if (!isOpen) return;
 
-      return () => clearInterval(timer);
+    let cancelled = false;
+    setIsTyping(true);
+    setDisplayedText("");
+    setShowExperts(false);
+    setExperts([]);
+
+    (async () => {
+      try {
+        const text = await generateAIResponse(problemText, category, userInfo);
+        if (cancelled) return;
+        setAiResponseText(text);
+      } catch (err) {
+        if (cancelled) return;
+        setAiResponseText("⚠️ Sorry, something went wrong while generating the response.");
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen, problemText, category, userInfo]);
+
+  // ---------- Typing animation ----------
+  useEffect(() => {
+    if (!isOpen || !isTyping || !aiResponseText) return;
+
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index < aiResponseText.length) {
+        setDisplayedText(aiResponseText.slice(0, index + 1));
+        index++;
+      } else {
+        clearInterval(timer);
+        setIsTyping(false);
+        setTimeout(() => setShowExperts(true), 1000);
+      }
+    }, 30);
+
+    return () => clearInterval(timer);
+  }, [isOpen, isTyping, aiResponseText]);
+
+  // ---------- Re-generate ----------
+  const handleRegenerate = async () => {
+    setIsTyping(true);
+    setDisplayedText("");
+    setShowExperts(false);
+    setExperts([]);
+    try {
+      const text = await generateAIResponse(problemText, category, userInfo);
+      setAiResponseText(text);
+    } catch {
+      setAiResponseText("⚠️ Sorry, something went wrong while generating the response.");
     }
-  }, [isOpen, aiResponse, isTyping]);
+  };
 
   if (!isOpen) return null;
 
@@ -237,7 +301,7 @@ export default function AIResponseChat({
             <div className="flex-1">
               <div className="bg-purple-50 rounded-2xl rounded-tl-sm p-4">
                 <p className="text-sm font-medium text-purple-700 mb-2">
-                  {userInfo.name} ({category})
+                  {userInfo?.name ?? "You"} ({category})
                 </p>
                 <p className="text-gray-700 leading-relaxed">{problemText}</p>
               </div>
@@ -271,7 +335,14 @@ export default function AIResponseChat({
                   </div>
                   {!isTyping && (
                     <div className="flex items-center gap-2 mt-4 pt-3 border-t border-gray-200">
-                      <Button variant="ghost" size="sm" className="text-xs">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs"
+                        onClick={() => {
+                          navigator.clipboard.writeText(displayedText).catch(() => {});
+                        }}
+                      >
                         <Copy className="w-3 h-3 mr-1" />
                         Copy
                       </Button>
@@ -291,16 +362,18 @@ export default function AIResponseChat({
           </div>
 
           {/* Expert Recommendations */}
-          {showExperts && (
+          {showExperts && experts.length > 0 && (
             <div className="border-t border-gray-200 pt-6">
               <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                🔥 **आपके लिए Perfect Experts:**
+                🔥 आपके लिए Perfect Experts:
               </h4>
               <div className="space-y-4">
                 {experts.map((expert, index) => (
                   <Card
                     key={expert.id}
-                    className={`hover:shadow-lg transition-all ${index === 0 ? "ring-2 ring-purple-200 bg-purple-50" : ""}`}
+                    className={`hover:shadow-lg transition-all ${
+                      index === 0 ? "ring-2 ring-purple-200 bg-purple-50" : ""
+                    }`}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
@@ -368,19 +441,10 @@ export default function AIResponseChat({
           <div className="p-4 border-t border-gray-200 bg-gray-50">
             <div className="flex items-center justify-between">
               <p className="text-xs text-gray-500">
-                💡 क्या यह response helpful था? आपका feedback हमारे लिए जरूरी
-                है।
+                💡 क्या यह response helpful था? आपका feedback हमारे लिए जरूरी है।
               </p>
               <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setIsTyping(true);
-                    setDisplayedText("");
-                    setShowExperts(false);
-                  }}
-                >
+                <Button variant="outline" size="sm" onClick={handleRegenerate}>
                   <RefreshCw className="w-4 h-4 mr-1" />
                   Re-generate
                 </Button>

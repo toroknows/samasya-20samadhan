@@ -1,14 +1,4 @@
-
-interface AIResponseContent {
-  category: string;
-  greeting: string;
-  analysis: string;
-  recommendation: string;
-  summary: string;
-  language: string;
-}
-
-interface OpenRouterResponse {
+interface AIResponse {
   choices: {
     message: {
       content: string;
@@ -16,27 +6,18 @@ interface OpenRouterResponse {
   }[];
 }
 
-
-
-
-export const getAIResponses = async (
-  problem: string
-): Promise<AIResponseContent> => {
- 
- 
+export async function getAIResponse(problemText: string): Promise<string> {
   try {
-    const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
-    const modelName = import.meta.env.VITE_OPENROUTER_MODEL_NAME;
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        "Authorization": `Bearer ${process.env.REACT_APP_OPENROUTER_API_KEY ?? ""}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": window.location.origin,
-        "X-Title": "SamasyaSamadhan",
+        
+        "X-Title": "SamasyaSamadhan"
       },
       body: JSON.stringify({
-        model: modelName,
+        model: "openai/gpt-oss-20b:free",
         messages: [
           {
             role: "system",
@@ -63,29 +44,22 @@ Rules:
   "language": "<detected language of the problem text>"
 }
 4. Always include the "language" field with the detected language of the problem text and it should be either hindi, hinglish or english.
-`,
+`
           },
-          
           {
             role: "user",
-            content: problem,
-          },
-        ],
-        verbosity: "low",
-      }),
+            content: problemText
+          }
+        ]
+      })
     });
 
-    const data: OpenRouterResponse = await response.json();
-    console.log("AI Raw Response:", data);
+    const data: AIResponse = await response.json();
+    console.log("AI Response:", data);
 
-    // OpenRouter returns JSON string inside `content`
-    const parsed: AIResponseContent = JSON.parse(
-      data.choices[0]?.message?.content ?? "{}"
-    );
-
-    return parsed;
-  } catch (e) {
-    console.error("AI request failed:", e);
-    throw new Error("⚠️ Sorry, something went wrong while generating AI response.");
+    return data.choices[0]?.message?.content ?? "";
+  } catch (err) {
+    console.error("AI request failed:", err);
+    throw new Error("AI request failed");
   }
-};
+}
