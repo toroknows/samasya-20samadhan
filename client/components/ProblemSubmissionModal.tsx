@@ -41,6 +41,7 @@ export default function ProblemSubmissionModal({
   const [formData, setFormData] = useState({
     name: "",
     age: "",
+    countryCode: "+91", // CHANGED: Added default country code
     phoneNumber: "",
     location: "",
     duration: "",
@@ -60,6 +61,8 @@ export default function ProblemSubmissionModal({
       if (onSubmitSuccess) {
         onSubmitSuccess({
           ...formData,
+          // Combine country code and phone number
+          fullPhoneNumber: `${formData.countryCode} ${formData.phoneNumber}`,
           category: selectedCategory,
           description: problemDescription,
         });
@@ -69,6 +72,7 @@ export default function ProblemSubmissionModal({
       setFormData({
         name: "",
         age: "",
+        countryCode: "+91",
         phoneNumber: "",
         location: "",
         duration: "",
@@ -178,19 +182,36 @@ export default function ProblemSubmissionModal({
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* CHANGED: Country Code + Phone Number Layout */}
                 <div className="space-y-2">
                   <Label htmlFor="phoneNumber" className="text-sm font-medium">
                     Mobile Number *
                   </Label>
-                  <Input
-                    id="phoneNumber"
-                    type="tel"
-                    placeholder="+91 XXXXX XXXXX"
-                    value={formData.phoneNumber}
-                    onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
-                    required
-                    className="h-11"
-                  />
+                  <div className="flex gap-2">
+                    <Select
+                      value={formData.countryCode}
+                      onValueChange={(value) => handleInputChange("countryCode", value)}
+                    >
+                      <SelectTrigger className="w-[90px] h-11">
+                        <SelectValue placeholder="Code" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="+91">+91 (IN)</SelectItem>
+                        <SelectItem value="+1">+1 (US/CA)</SelectItem>
+                        <SelectItem value="+44">+44 (UK)</SelectItem>
+                        <SelectItem value="+61">+61 (AU)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      id="phoneNumber"
+                      type="tel"
+                      placeholder="XXXXX XXXXX"
+                      value={formData.phoneNumber}
+                      onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
+                      required
+                      className="h-11 flex-1"
+                    />
+                  </div>
                 </div>
                 
                 <div className="space-y-2">
